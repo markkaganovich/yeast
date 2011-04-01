@@ -12,12 +12,14 @@ def setalignindex(objects, orfs, name):
     if hasattr(objects[name], 'alignment'):
         for k in range(0,2):
             dashes = 0
-            print name
             if name[k] in orfs.keys() and hasattr(orfs[name[k]], 'seq'):
-                for i in range(0, len(orfs[name[k]].seq)):
+                i = 0
+                while i < len(orfs[name[k]].seq):
                     if objects[name].alignment[name[k]][i+dashes] == '-':
                         dashes = dashes + 1
-                    alignindex[name[k]][i] = dashes +i 
+                    else:
+                        alignindex[name[k]][i] = dashes +i 
+                        i = i+1
         setattr(objects[name], 'alignindex', alignindex)
 
 

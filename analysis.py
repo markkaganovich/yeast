@@ -1,11 +1,9 @@
 import simplejson
 import Paralogs
-
 '''
 get wapinski paralogs, convert them to tupules, and add them as
 attributes to the Paralog objects
 ''' 
-
 file = open('./data/paralogswapinskilistwithevents')
 paraloglines = simplejson.load(file)
 file.close()
@@ -43,6 +41,41 @@ for p in Pars.keys():
                             orfs[o].phosphosite))
                 Pars[p].phosphosites[o] = (map(lambda x: Pars[p].alignindex[o][x],
                             f))
+
+# add SYT positions 
+for p in Pars.keys():
+    if hasattr(Pars[p], 'alignindex'):
+        setattr(Pars[p], 'sytpos', {})
+        for o in Pars[p].orfs:
+            if o in orfs.keys():
+                Pars[p].sytpos[o] = (map(lambda x: Pars[p].alignindex[o][x], 
+                            orfs[o].sytpos))
+
+#within paralog seq conservation
+# (what if there are more than two? - everything should be treated as a pair
+# for neofunctionalization questions) -- right now everything is a pair
+# do which amino acids are conserved, then how many
+for p in Pars.keys():
+    if hasattr(Pars[p], 'alignment'):
+        o1 = Pars[p].orfs[0]
+        o2 = Pars[p].orfs[1]
+        seqcons = map(lambda x,y: x == y, Pars[p].alignment[o1], Pars[p].alignment[o2])
+        sytconswithinSYT = list(set(Pars[p].sytpos[o1]) & set(Pars[p].sytpos[o2]))
+        sytcons1 = ([x for x in Pars[p].sytpos[o1] if Pars[p].alignment[o1][x] ==
+                Pars[p].alignment[o2][x]])
+        sytcons2 = ([x for x in Pars[p].sytpos[o2] if Pars[p].alignment[o1][x] ==
+                Pars[p].alignment[o2][x]])
+        setattr(Pars[p], 'sytconswithinsyt', sytconswithinSYT)
+        setattr(Pars[p], 'seqcons', seqcons)
+        setattr(Pars[p], 'sytcons', sytcons1 + sytcons2)
+        setattr(Pars[p], 'numseqcons', len(seqcons))
+        setattr(Pars[p], 'numsytcons', len(Pars[p].sytcons))
+        setattr(Pars[p], 'numsytconswithinsyt', len(sytconswithinSYT))
+
+
+                
+
+
 
 
 
