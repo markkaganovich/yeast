@@ -5,13 +5,19 @@ class Orf:
         self.name = name
 
 def getWparalogs(orf, name, wapinskiparalogs):
-    paralogs = {}
-    for event in wapinskiparalogs.keys():
-        for k,v in wapinskiparalogs[event].items():
-            if k == name:
-                paralogs[name] = v
-            if v == name:
-                paralogs[name] = k
+    paralogs = []
+    events = []
+    for p in wapinskiparalogs:
+        l = p.strip('\n').split(' ')
+        if len(l) > 2:
+            if l[0] == name:
+                paralogs.append(l[1])
+                events.append(l[2])
+            if l[1] == name:
+                paralogs.append(l[0])
+                events.append(l[2])
+    setattr(orf, 'paralogs', paralogs)  
+    setattr(orf, 'duplevent', events)
 
 def getphosphosites(orf, name, phosphosites):
     setattr(orf, 'phosphosite', phosphosites[name])
@@ -73,3 +79,14 @@ def addtoall(objects, geneset, attrfun, attrhash):
         getphosphosites(Orfs[g], g, phosphosites)
 '''
 
+'''
+file = open('./data/sequences/Scer.fasta')
+lines = file.readlines()
+file.close()
+
+for line in lines:
+    if line.startswith('>'):
+        o = orfs[line.strip('\n').split('>')[1]]
+    else:
+        setattr(o, 'seq', line.strip('\n'))
+'''
