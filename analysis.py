@@ -1,7 +1,5 @@
 import simplejson
 import Paralogs
-import ORFs
-import globals
 
 '''
 get wapinski paralogs, convert them to tupules, and add them as
@@ -29,12 +27,22 @@ file.close()
 
 for k in dicpars.keys():
     names = k.split('_')
+    Pars[(names[0], names[1])].alignment = {}
     Pars[(names[0], names[1])].alignment[names[0]] = dicpars[k][0]
     Pars[(names[0], names[1])].alignment[names[1]] = dicpars[k][1]
 
 for p in plist:
     Paralogs.setalignindex(Pars, orfs, p)
 
+for p in Pars.keys():
+    if hasattr(Pars[p], 'alignindex'):
+        setattr(Pars[p], 'phosphosites', {})
+        for o in Pars[p].orfs:
+            if o in orfs.keys() and hasattr(orfs[o], 'phosphosite'):
+                f = (filter(lambda x: x in Pars[p].alignindex[o].keys(), 
+                            orfs[o].phosphosite))
+                Pars[p].phosphosites[o] = (map(lambda x: Pars[p].alignindex[o][x],
+                            f))
 
 
 
