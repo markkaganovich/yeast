@@ -4,12 +4,12 @@ import Paralogs
 get wapinski paralogs, convert them to tupules, and add them as
 attributes to the Paralog objects
 ''' 
-file = open('./data/paralogswapinskilistwithevents')
+file = open('./data/paralogswapinskilistfigS6')
 paraloglines = simplejson.load(file)
 file.close()
 
-paraloglist = map(lambda x: x.strip('\n').split(' '), paraloglines)
-plist = [(x[0], x[1]) for x in paraloglist if len(x) > 2] 
+paraloglist = map(lambda x: x.strip('\n').split('\t'), paraloglines)
+plist = [(x[0], x[1]) for x in paraloglist] 
 '''
 file = open('./paralogswapinskilist')
 plist = simplejson.load(file)
@@ -71,12 +71,41 @@ for p in Pars.keys():
         setattr(Pars[p], 'numseqcons', len(seqcons))
         setattr(Pars[p], 'numsytcons', len(Pars[p].sytcons))
         setattr(Pars[p], 'numsytconswithinsyt', len(sytconswithinSYT))
+        (setattr(Pars[p], 'totalsyt', len(Pars[p].sytpos[o1])+len(Pars[p].sytpos[o2])))
+        setattr(Pars[p], 'seqlength', len(orfs[o1].seq)+len(orfs[o2].seq))
+        setattr(Pars[p], 'totalseqdiff', Pars[p].seqlength - 2*Pars[p].numseqcons)
 
+for p in Pars.keys():
+    o1 = Pars[p].orfs[0]
+    o2 = Pars[p].orfs[1]
+    if hasattr(Pars[p], 'phosphosites'):
+        if len(Pars[p].phosphosites.keys()) != 2:
+            setattr(Pars[p], 'phosphositecons', 0)
+        else:
+            phosphositecons = list(set(Pars[p].phosphosites[o1]) & set(Pars[p].phosphosites[o2]))
+            setattr(Pars[p], 'phosphositecons', phosphositecons)
+        if len(Pars[p].phosphosites.keys()) == 0:
+            setattr(Pars[p], 'totalphosphoevents', 0)
+        else:
+            phosphos = 0
+            for o in (o1,o2):
+                if o in Pars[p].phosphosites.keys():
+                    phosphos = phosphos + len(Pars[p].phosphosites[o])
 
-                
+# add events 
+events = [x[2] for x in paraloglist if len(x) > 2] 
+for i,p in enumerate(plist):
+    setattr(Pars[p], 'event', events[i])
+    
+gotermdiv = [(x[3], x[4], x[5]) for x in paraloglist if len(x) > 5]
+for i,p in enumerate(plist):
+    setattr(Pars[p], 'go_component_div', gotermdiv[i][0])
+    setattr(Pars[p], 'go_process_div', gotermdiv[i][1])
+    setattr(Pars[p], 'go_function_div', gotermdiv[i][2])
 
-
-
+txnmodulediv = [x[6] for x in paraloglist]
+for i,p in enumerate(plist):
+    setattr(Pars[p], 'txnmodule_div_wapin', txnmodulediv[i])
 
 
 
