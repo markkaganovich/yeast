@@ -68,12 +68,18 @@ for p in Pars.keys():
         setattr(Pars[p], 'sytconswithinsyt', sytconswithinSYT)
         setattr(Pars[p], 'seqcons', seqcons)
         setattr(Pars[p], 'sytcons', sytcons1 + sytcons2)
-        setattr(Pars[p], 'numseqcons', len(seqcons))
-        setattr(Pars[p], 'numsytcons', len(Pars[p].sytcons))
-        setattr(Pars[p], 'numsytconswithinsyt', len(sytconswithinSYT))
-        (setattr(Pars[p], 'totalsyt', len(Pars[p].sytpos[o1])+len(Pars[p].sytpos[o2])))
-        setattr(Pars[p], 'seqlength', len(orfs[o1].seq)+len(orfs[o2].seq))
-        setattr(Pars[p], 'totalseqdiff', Pars[p].seqlength - 2*Pars[p].numseqcons)
+        setattr(Pars[p], 'numseqcons', sum(seqcons))
+        setattr(Pars[p], 'sumseqlength', len(orfs[o1].seq)+len(orfs[o2].seq))
+        setattr(Pars[p], 'seqdiff', 1- (Pars[p].numseqcons/float(Pars[p].sumseqlength/2))) 
+
+for p in Pars.keys():
+    if hasattr(Pars[p], 'alignment'):
+        o1 = Pars[p].orfs[0]
+        o2 = Pars[p].orfs[1]
+        setattr(Pars[p], 'numsytcons', len(list(set(Pars[p].sytcons))))
+        setattr(Pars[p], 'numsytconswithinsyt', len(list(set(sytconswithinSYT))))
+        setattr(Pars[p], 'avgsyt', (len(Pars[p].sytpos[o1])+len(Pars[p].sytpos[o2])/2))
+        setattr(Pars[p], 'sytdiff', 1-(float(Pars[p].numsytcons)/Pars[p].avgsyt))
 
 for p in Pars.keys():
     o1 = Pars[p].orfs[0]
@@ -82,8 +88,11 @@ for p in Pars.keys():
         if len(Pars[p].phosphosites.keys()) != 2:
             setattr(Pars[p], 'phosphositecons', 0)
         else:
-            phosphositecons = list(set(Pars[p].phosphosites[o1]) & set(Pars[p].phosphosites[o2]))
-            setattr(Pars[p], 'phosphositecons', phosphositecons)
+            phosphositecons = len(list(set(Pars[p].phosphosites[o1]) & set(Pars[p].phosphosites[o2])))
+            (setattr(Pars[p], 'phosphositecons', phosphositecons/
+                     (float((len(Pars[p].phosphosites[o1]) + len(Pars[p].phosphosites[o2])))/2)))
+        
+        '''    
         if len(Pars[p].phosphosites.keys()) == 0:
             setattr(Pars[p], 'totalphosphoevents', 0)
         else:
@@ -91,7 +100,7 @@ for p in Pars.keys():
             for o in (o1,o2):
                 if o in Pars[p].phosphosites.keys():
                     phosphos = phosphos + len(Pars[p].phosphosites[o])
-
+        '''
 # add events 
 events = [x[2] for x in paraloglist if len(x) > 2] 
 for i,p in enumerate(plist):
@@ -106,6 +115,17 @@ for i,p in enumerate(plist):
 txnmodulediv = [x[6] for x in paraloglist]
 for i,p in enumerate(plist):
     setattr(Pars[p], 'txnmodule_div_wapin', txnmodulediv[i])
+
+
+
+
+
+    
+
+
+
+
+
 
 
 
