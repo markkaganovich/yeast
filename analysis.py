@@ -116,6 +116,26 @@ txnmodulediv = [x[6] for x in paraloglist]
 for i,p in enumerate(plist):
     setattr(Pars[p], 'txnmodule_div_wapin', txnmodulediv[i])
 
+# add orf1 and orf2 seqdiv, sytdiv, and phosphodiv
+wts = []
+for p in Pars.keys():
+    par = Pars[p]
+    if par.orfs[0] in orfs.keys() and par.orfs[1] in orfs.keys():
+        o1 = orfs[par.orfs[0]]
+        o2 = orfs[par.orfs[1]]
+    else:
+        continue
+    if o1.orthos['Kwal'] == 'NONE' or o2.orthos['Kwal'] == 'NONE':
+        continue
+    if o1.orthos['Kwal'] != o2.orthos['Kwal']:
+        wts.append(par.orfs)
+    setattr(par, 'minorfseqdiv', min(1-o1.seqcons, 1-o2.seqcons))
+    setattr(par, 'maxorfseqdiv', max(1-o1.seqcons, 1-o2.seqcons))
+    setattr(par, 'minorfsytdiv', min(1-o1.sytcons, 1-o2.sytcons))
+    setattr(par, 'maxorfsytdiv', max(1-o1.sytcons, 1-o2.sytcons))
+    if hasattr(o1, 'phosphocons') and hasattr(o2, 'phosphocons'):
+        setattr(par, 'minorfphosphodiv', min(1-o1.phosphocons, 1-o2.phosphocons))
+        setattr(par, 'maxorfphosphodiv', max(1-o1.phosphocons, 1-o2.phosphocons))
 
 
 

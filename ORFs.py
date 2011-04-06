@@ -29,11 +29,17 @@ def getWparalogs(orf, name, wapinskiparalogs):
 
 def getphosphosites(orf, name, phosphosites):
     if name in phosphosites.keys():
-        setattr(orf, 'phosphosite', phosphosites[name])
+        properlyindexed = map(lambda x: x-1, phosphosites[name])
+        setattr(orf, 'phosphosite', properlyindexed)
 
 def getalign(orf, name, hash):
     if name in hash.keys():
         setattr(orf, 'kwalalign', hash[name])
+
+def getotheralign(orf, name, hash, speciesalign):
+    if name in hash.keys():
+        setattr(orf, speciesalign, hash[name])
+
 
 def getmultiplealign(orf, name, hash):
     if name in hash.keys():
@@ -69,7 +75,15 @@ if __name__ == "__main__":
     file = open('./data/gersteinphosphositefile')
     phosphosites = simplejson.load(file)
     file.close()
-    
+    file = open('./data/Scasalign')
+    scasalign = simplejson.load(file)
+    file.close()
+    file = open('./data/Calbalign')
+    calbalign = simplejson.load(file)
+    file.close()
+
+
+
     '''
     file = open('./data/orthophosphosites')
     phosphosites = simplejson.load(file)
@@ -92,8 +106,10 @@ if __name__ == "__main__":
     addtoall(orfs, geneset, getorthos, orthologs)
     addtoall(orfs, geneset, getphosphosites, phosphosites)
     addtoall(orfs, geneset, getWparalogs, paralogslist)
+    
     map(lambda x: getSYTpos(orfs[x]), geneset)
-
+    map(lambda x: getotheralign(orfs[x], x, scasalign, 'scasalign'), geneset)
+    map(lambda x: getotheralign(orfs[x], x, calbalign, 'calbalign'), geneset)
     file = open('./data/sequences/Scer.fasta')
     lines = file.readlines()
     file.close()

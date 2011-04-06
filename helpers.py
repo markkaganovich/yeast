@@ -84,7 +84,7 @@ def GenOrthologs(genes):
         if i==2:
             i=i+1
             continue 
-        File = open('../lab/genomes/Scer-'+str(species[i])+'-orthologs.txt')
+        File = open('./data/orthologfiles/Scer-'+str(species[i])+'-orthologs.txt')
         genes2 = LoadfromFile('../lab/genomes/'+species[i]+'Genes')
 
         lines = File.readlines()
