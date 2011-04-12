@@ -33,12 +33,14 @@ for o in orfs.keys():
                 i = i+1
         setattr(orf, 'kwalalignindex', kwalalignindex)
 
-# build other alignments
-otheralign = 'scasalign'
+# build other alignment indeces
+otheralign = 'calbalign'
+species2 = 'Calb'
+
 for o in orfs.keys():
     orf = orfs[o]
     otheralignindex = {}
-    if hasattr(orf, otheralign) and 'Scer' in getattr(orf, otheralign).keys() and 'Scas' in getattr(orf, otheralign).keys():
+    if hasattr(orf, otheralign) and 'Scer' in getattr(orf, otheralign).keys() and species2 in getattr(orf, otheralign).keys():
         dashes = 0
         i = 0
         while i < len(orf.seq):
@@ -48,11 +50,6 @@ for o in orfs.keys():
                 otheralignindex[i] = dashes + i
                 i = i+1
         setattr(orf, otheralign+'index', otheralignindex)
-
-# build other alignments
-
-
-
 
 # phosphosite data sanity check
 toolongfororf = []
@@ -83,17 +80,43 @@ for o in orfs.keys():
             pcons = map(lambda x: orf.kwalalign['Scer'][x] == orf.kwalalign['Kwal'][x], phosphoindex)
             setattr(orf, 'phosphocons', sum(pcons)/float(len(orf.phosphosite)))
 
+# otheralign ortho and phosphosite conservation
+otheralign = 'spomalign'
+species2 = 'Spom'
+for o in orfs.keys():
+    orf = orfs[o]
+    if hasattr(orf, otheralign) and 'Scer' in getattr(orf, otheralign).keys() and species2 in getattr(orf, otheralign).keys():
+        (setattr(orf,species2 + 'seqcons', 
+                 sum(map(lambda x,y: x == y, getattr(orf, otheralign)['Scer'], getattr(orf, otheralign)[species2]))/
+                 float(len(orf.seq))))
+        if hasattr(orf, 'phosphosite') and len(orf.phosphosite) > 0:
+            phosphoindex = map(lambda x: getattr(orf, otheralign+'index')[x], orf.phosphosite)
+            pcons = map(lambda x: getattr(orf, otheralign)['Scer'][x] == getattr(orf, otheralign)[species2][x], phosphoindex)
+            setattr(orf, species2 +'phosphocons', sum(pcons)/float(len(orf.phosphosite)))
+
 # syt conservation
 for o in orfs.keys():
     orf = orfs[o]
+    sytpos = ([i for i,x in enumerate(orf.seq) 
+            if x == 'S' or x == 's' or x == 'T' or x == 't' or x == 'Y' or x == 'y'])
+    setattr(orf, 'sytpos', sytpos)
     if hasattr(orf, 'kwalalign') and 'Scer' in orf.kwalalign.keys() and 'Kwal' in orf.kwalalign.keys():
-        sytpos = ([i for i,x in enumerate(orf.seq) 
-                if x == 'S' or x == 's' or x == 'T' or x == 't' or x == 'Y' or x == 'y'])
         sytposalign = map(lambda x: orf.kwalalignindex[x], sytpos)
         sytcons = map(lambda x: orf.kwalalign['Scer'][x] == orf.kwalalign['Kwal'][x], sytposalign)
         setattr(orf, 'sytcons', sum(sytcons)/float(len(sytpos)))
+        setattr(orf, 'sytpos', sytpos)
 
-
+# syt conservation for other alignments
+otheralign ='scasalign'
+species2 = 'Scas'
+for o in orfs.keys():
+    orf = orfs[o]
+    if hasattr(orf, otheralign) and 'Scer' in getattr(orf, otheralign).keys() and species2 in getattr(orf, otheralign).keys():
+        sytpos = ([i for i,x in enumerate(orf.seq) 
+                if x == 'S' or x == 's' or x == 'T' or x == 't' or x == 'Y' or x == 'y'])
+        sytposalign = map(lambda x: getattr(orf, otheralign + 'index')[x], sytpos)
+        sytcons = map(lambda x: getattr(orf, otheralign)['Scer'][x] == getattr(orf, otheralign)[species2][x], sytposalign)
+        setattr(orf, species2+'sytcons', sum(sytcons)/float(len(sytpos)))
 
 # add gene names to ORFs names
 file = open('./data/go_slim_mapping.txt')

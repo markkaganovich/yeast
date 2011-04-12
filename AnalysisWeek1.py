@@ -5,6 +5,7 @@ the existence of orfs and Pars is assumed
 '''
 import fisher
 import numpy
+import operator
 
 '''
 compare phosphosite divergence with sequence divergence
@@ -47,6 +48,23 @@ consGOminseqdiv = []
 consGOminphosphodiv = [] 
 consGOminsytdiv = []
 here =[]
+
+maxseqdiv = []
+minseqdiv = []
+maxphosphodiv = []
+minphosphodiv = []
+
+
+for p in geneset:
+    par = Pars[p]
+    if hasattr(par, 'maxorfseqdiv'):
+        maxseqdiv.append(par.maxorfseqdiv)
+        if hasattr(par, 'maxorfphosphodiv'):
+            maxphosphodiv.append(par.maxorfphosphodiv)
+        minseqdiv.append(par.minorfseqdiv)
+        if hasattr(par, 'minorfphosphodiv'):
+            minphosphodiv.append(par.minorfphosphodiv)
+
 for p in geneset:
     par = Pars[p]
     if hasattr(par, 'maxorfseqdiv'):
@@ -71,10 +89,144 @@ for p in geneset:
                 consGOminphosphodiv.append(par.minorfphosphodiv)
 
 
+for p in geneset:
+    par = Pars[p]
+    if hasattr(par, 'maxorfseqdiv'):
+        maxseqdiv.append(par.maxorfseqdiv)
+        if hasattr(par, 'maxorfphosphodiv'):
+            divGOmaxphosphodiv.append(par.maxorfphosphodiv)
+        minseqdiv.append(par.minorfseqdiv)
+        if hasattr(par, 'minorfphosphodiv'):
+            minphosphodiv.append(par.minorfphosphodiv)
+
+
+oneisaTF = []
+bothareTFs = []
+for p in Pars.keys():
+    par = Pars[p]
+    if par.orfs[0] in orfs.keys() and par.orfs[1] in orfs.keys():
+        o1 = orfs[par.orfs[0]]
+        o2 = orfs[par.orfs[1]]
+        if sum([o1.TF, o2.TF]) == 2:
+            bothareTFs.append(p)
+        if sum([o1.TF, o2.TF]) == 1:
+            oneisaTF.append(p)
+    
+TFparsfromWGD =[]
+TFparsfromSSD = []
+for p in bothareTFs:
+    if Pars[p].event == 'WGD':
+        TFparsfromWGD.append(p)
+    else:
+        TFparsfromSSD.append(p)
+
+oneisaTFfromWGD = []
+oneisaTFfromSSD = []
+for p in oneisaTF:
+    if Pars[p].event == 'WGD':
+        oneisaTFfromWGD.append(p)
+    else:
+        oneisaTFfromSSD.append(p)
+
+phosphosites = []
+for o in TFs:
+    if o not in orfs.keys():
+        o
+        continue
+    if hasattr(orfs[o], 'phosphosite'):
+        phosphosites.append(len(orfs[o].phosphosite))
+
+phosphosites = sum(phosphosites)
+
+simlength = 1000
+simphosphosums = []
+
+for j in range(0,simlength):
+    phosphosites = []
+    for i in range(0,len(TFs)):
+        n = numpy.random.randint(len(orfs.keys()))
+        orf = orfs[orfs.keys()[n]]
+        if hasattr(orf, 'phosphosite'):
+            phosphosites.append(len(orf.phosphosite))
+
+    simphosphosums.append(sum(phosphosites))
+
+# make a geneset of just TFs that have phosphosites
+geneset = []
+allTFpars = oneisaTF + bothareTFs
+for p in allTFpars:
+    o1 = orfs[Pars[p].orfs[0]]
+    o2 = orfs[Pars[p].orfs[1]]
+    if hasattr(o1, 'phosphosite') and hasattr(o2, 'phosphosite'):
+        geneset.append(p)
+
+
+# Rick Young 2002 Science TF binding regions
+youngTFslist #second line of file
+TFnames #Jen's TF list converted to gene names
+file = open('./data/binding_by_gene.tsv')
+lines = file.readlines()
+file.close()
+TFbinding ={}
+for tf in TFs:
+    TFbinding[tf] = []
+
+for line in lines:
+    l = line.strip('\n').strip('\r').split('\t')
+    gene = l[0]
+    for i in range(4, len(l)):
+        if l[i] !='' and float(l[i]) < .05:
+            youngTF = youngTFslist[i]
+            if youngTF in TFnames:
+                TFbinding[TFs[TFnames.index(youngTF)]].append(gene)
+
+indofp = [i for (i,j) in sorted(enumerate(phosphodiff), key=operator.itemgetter(1), reverse = True)]
 
 
 
-def calGOorf(geneset, orfs, Pars):
+
+
+
+
+
+
+
+
+
+
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+for p in geneset:
+    par = Pars[p]
+    if hasattr(par, 'maxorfseqdiv') and hasattr(par, 'minorfphosphodiv'):
+        here.append(p)
+        if getattr(par, type) == str(1):
+            divGOmaxseqdiv.append(par.maxorfseqdiv)
+            divGOmaxsytdiv.append(par.maxorfsytdiv)
+            divGOmaxphosphodiv.append(par.maxorfphosphodiv)
+            divGOminseqdiv.append(par.minorfseqdiv)
+            divGOminsytdiv.append(par.minorfsytdiv)
+            divGOminphosphodiv.append(par.minorfphosphodiv)
+        else:
+            consGOmaxseqdiv.append(par.maxorfseqdiv)
+            consGOmaxsytdiv.append(par.maxorfsytdiv)
+            consGOmaxphosphodiv.append(par.maxorfphosphodiv)
+            consGOminseqdiv.append(par.minorfseqdiv)
+            consGOminsytdiv.append(par.minorfsytdiv)
+            consGOminphosphodiv.append(par.minorfphosphodiv)
+
+
+
+
     for p in geneset:
         for i,t in enumerate(types):
             if hasattr(Pars[p], 'alignment'):
@@ -84,85 +236,6 @@ def calGOorf(geneset, orfs, Pars):
                     calconsGOorf(geneset, orfs, Pars, t)
 
                     
-def caldivGOorf(geneset, orfs, Pars, t, divGOmaxseqdiv = {}, divGOmaxphosphodiv = {}, divGOmaxsytdiv = {}, 
-        divGOminseqdiv = {}, divGOminphosphodiv ={}, divGOminsytdiv = {}): 
-    if t not in divGOmaxseqdiv.keys():
-        divGOmaxseqdiv[t] = []
-    divGOmaxseqdiv[t].append(Pars[p].maxorfseqdiv)
-    if t not in divGOmaxphosphodiv.keys():
-        divGOmaxphosphodiv[t] = []
-    if hasattr(Pars[p], 'maxorfphosphodiv'):
-        divGOmaxphosphodiv[t].append(Pars[p].maxorfphosphodiv)
-    if t not in divGOmaxsytdiv.keys():
-        divGOmaxsytdiv[t] = []
-    divGOmaxsytdiv[t].append(Pars[p].maxorfsytdiv)
-    if t not in divGOminseqdiv.keys():
-        divGOmaxseqdiv[t] = []
-    divGOminseqdiv[t].append(Pars[p].minorfseqdiv)
-    if t not in divGOminphosphodiv.keys():
-        divGOminphosphodiv[t] = []
-    if hasattr(Pars[p], 'minorfphosphodiv'):    
-        divGOminphosphodiv[t].append(Pars[p].minorfphosphodiv)
-    if t not in divGOminsytdiv.keys():
-        divGOminsytdiv[t] = []
-    divGOminsytdiv[t].append(Pars[p].minorfsytdiv)
-    printresults(divGOmaxseqdiv, divGOmaxphosphodiv, divGOmaxsytdiv, 
-                    divGOminseqdiv, divGOminphosphodiv, divGOminsytdiv)
-
-def calconsGOorf(geneset, orfs, Pars, t, consGOmaxseqdiv = {}, consGOmaxphosphodiv = {},
-            consGOmaxsytdiv = {}, consGOminseqdiv = {}, consGOminphosphodiv = {}, consGOminsytdiv = {}):
-    if t not in consGOmaxseqdiv.keys():
-        consGOmaxseqdiv[t] = []
-    consGOmaxseqdiv[t].append(Pars[p].maxorfseqdiv)
-    if t not in consGOmaxphosphodiv.keys():
-        consGOmaxphosphodiv[t] = []
-    if hasattr(Pars[p], 'maxorfphosphodiv'):
-        consGOmaxphosphodiv[t].append(Pars[p].maxorfphosphodiv)
-    if t not in consGOmaxsytdiv.keys():
-        consGOmaxsytdiv[t] = []
-    consGOmaxsytdiv[t].append(Pars[p].maxorfsytdiv)
-    if t not in consGOminseqdiv.keys():
-        consGOminseqdiv[t] = []
-    consGOminseqdiv[t].append(Pars[p].minorfseqdiv)
-    if t not in consGOminphosphodiv.keys():
-        consGOminphosphodiv[t] = []
-    if hasattr(Pars[p], 'minorfphosphodiv'):    
-        consGOminphosphodiv[t].append(Pars[p].minorfphosphodiv)
-    if t not in consGOminsytdiv.keys():
-        consGOminsytdiv[t] = []
-    consGOminsytdiv[t].append(Pars[p].minorfsytdiv)
-    printresults(consGOmaxseqdiv, consGOmaxphosphodiv, consGOmaxsytdiv, 
-                    consGOminseqdiv, consGOminphosphodiv, consGOminsytdiv)
-
-
-def calcdivGO(geneset, orfs, Pars, divGOseqdiv = {}, divGOphosphodiv = {}, divGOsytdiv = {}, consGOseqdiv = {}, 
-        consGOphosphodiv = {}, consGOsytdiv = {}):
-    for p in geneset:
-        for i, t in enumerate(types):
-            if hasattr(Pars[p], 'alignment'):
-                if getattr(Pars[p], typesinPars[i]) == str(1):
-                    if t not in divGOseqdiv.keys():
-                        divGOseqdiv[t] = []
-                    divGOseqdiv[t].append(Pars[p].seqdiff)
-                    if t not in divGOphosphodiv.keys():
-                        divGOphosphodiv[t] = []
-                    divGOphosphodiv[t].append(1-Pars[p].phosphositecons)
-                    if t not in divGOsytdiv.keys():
-                        divGOsytdiv[t] = []
-                    divGOsytdiv[t].append(Pars[p].sytdiff)
-                else:
-                    if t not in consGOseqdiv.keys():
-                        consGOseqdiv[t] = []
-                    consGOseqdiv[t].append(Pars[p].seqdiff)
-                    if t not in consGOphosphodiv.keys():
-                        consGOphosphodiv[t] = []
-                    consGOphosphodiv[t].append(1-Pars[p].phosphositecons)
-                    if t not in consGOsytdiv.keys():
-                        consGOsytdiv[t] = []
-                    consGOsytdiv[t].append(Pars[p].sytdiff)
-    printresults(divGOseqdiv, divGOphosphodiv, 
-            divGOsytdiv, consGOseqdiv, consGOphosphodiv, consGOsytdiv)
-
 def printresults(divGOseqdiv, divGOphosphodiv, divGOsytdiv, consGOseqdiv,
                       consGOphosphodiv, consGOsytdiv):
     f = fisher.FisherExactTest()

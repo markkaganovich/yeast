@@ -81,18 +81,12 @@ if __name__ == "__main__":
     file = open('./data/Calbalign')
     calbalign = simplejson.load(file)
     file.close()
-
-
-
+    file = open('./data/Spomalign')
+    spomalign = simplejson.load(file)
+    file.close()
     '''
     file = open('./data/orthophosphosites')
     phosphosites = simplejson.load(file)
-    file.close()
-    '''
-    '''
-    file = open('./data/wapinskiparalogsbyevent')
-    paralogs = simplejson.load(file)
-    del paralogs['all']
     file.close()
     '''
     file = open('./paralogslist')
@@ -110,6 +104,8 @@ if __name__ == "__main__":
     map(lambda x: getSYTpos(orfs[x]), geneset)
     map(lambda x: getotheralign(orfs[x], x, scasalign, 'scasalign'), geneset)
     map(lambda x: getotheralign(orfs[x], x, calbalign, 'calbalign'), geneset)
+    map(lambda x: getotheralign(orfs[x], x, spomalign, 'spomalign'), geneset)
+    
     file = open('./data/sequences/Scer.fasta')
     lines = file.readlines()
     file.close()

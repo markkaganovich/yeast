@@ -47,7 +47,7 @@ for p in Pars.keys():
     if hasattr(Pars[p], 'alignindex'):
         setattr(Pars[p], 'sytpos', {})
         for o in Pars[p].orfs:
-            if o in orfs.keys():
+            if o in orfs.keys() and hasattr(o,'alignindex'):
                 Pars[p].sytpos[o] = (map(lambda x: Pars[p].alignindex[o][x], 
                             orfs[o].sytpos))
 
