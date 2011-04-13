@@ -47,7 +47,7 @@ for p in Pars.keys():
     if hasattr(Pars[p], 'alignindex'):
         setattr(Pars[p], 'sytpos', {})
         for o in Pars[p].orfs:
-            if o in orfs.keys() and hasattr(o,'alignindex'):
+            if o in orfs.keys():
                 Pars[p].sytpos[o] = (map(lambda x: Pars[p].alignindex[o][x], 
                             orfs[o].sytpos))
 
@@ -136,6 +136,29 @@ for p in Pars.keys():
     if hasattr(o1, 'phosphocons') and hasattr(o2, 'phosphocons'):
         setattr(par, 'minorfphosphodiv', min(1-o1.phosphocons, 1-o2.phosphocons))
         setattr(par, 'maxorfphosphodiv', max(1-o1.phosphocons, 1-o2.phosphocons))
+    
+# other species alignments
+species2 = 'Scas'
+for p in ssd:
+    par = Pars[p]
+    if par.orfs[0] in orfs.keys() and par.orfs[1] in orfs.keys():
+         o1 = orfs[par.orfs[0]]
+         o2 = orfs[par.orfs[1]]
+    else:
+         continue
+    if o1.orthos[species2] == 'NONE' or o2.orthos[species2] == 'NONE':
+        continue
+    if o1.orthos[species2] != o2.orthos[species2]:
+        wts.append(par.orfs)
+    setattr(par, 'minorfseqdiv', min(1-getattr(o1, species2+'seqcons'), 1-getattr(o2, species2+'seqcons')))
+    setattr(par, 'maxorfseqdiv', max(1-getattr(o1, species2+'seqcons'), 1-getattr(o2, species2+'seqcons')))      
+    setattr(par, 'minorfsytdiv', min(1-getattr(o1, species2+'sytcons'), 1-getattr(o2, species2+'sytcons')))
+    setattr(par, 'maxorfsytdiv', max(1-getattr(o1, species2+'sytcons'), 1-getattr(o2, species2+'sytcons')))
+    if hasattr(o1, species2+'phosphocons') and hasattr(o2, species2 +'phosphocons'):
+        setattr(par, 'minorfphosphodiv', min(1-getattr(o1, species2+'phosphocons'), 1-getattr(o2, species2+'phosphocons')))
+        setattr(par, 'maxorfphosphodiv', max(1-getattr(o1, species2+'phosphocons'), 1-getattr(o2, species2+'phosphocons')))
+
+
 
 
 
