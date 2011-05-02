@@ -60,28 +60,29 @@ def getSYTpos(orf):
 
 
 if __name__ == "__main__":
-    file = open('./data/scergenes')
+    datasource = '/Users/markkaganovich/Dropbox'
+    file = open(datasource + '/data/scergenes')
     geneset = simplejson.load(file)
     file.close()
-    file = open('./data/ScerKwalAlignment')
+    file = open(datasource + '/data/ScerKwalAlignment')
     scerkwalalign = simplejson.load(file)
     file.close()
-    file = open('./data/speciesalign')
+    file = open(datasource + '/data/speciesalign')
     speciesalign = simplejson.load(file)
     file.close()
-    file = open('./data/KellisOrthos')
+    file = open(datasource + '/data/KellisOrthos')
     orthologs = simplejson.load(file)
     file.close()
-    file = open('./data/gersteinphosphositefile')
+    file = open(datasource + '/data/gersteinphosphositefile')
     phosphosites = simplejson.load(file)
     file.close()
-    file = open('./data/Scasalign')
+    file = open(datasource + '/data/Scasalign')
     scasalign = simplejson.load(file)
     file.close()
-    file = open('./data/Calbalign')
+    file = open(datasource + '/data/Calbalign')
     calbalign = simplejson.load(file)
     file.close()
-    file = open('./data/Spomalign')
+    file = open(datasource + '/data/Spomalign')
     spomalign = simplejson.load(file)
     file.close()
     '''
@@ -89,7 +90,7 @@ if __name__ == "__main__":
     phosphosites = simplejson.load(file)
     file.close()
     '''
-    file = open('./paralogslist')
+    file = open(datasource + '/paralogslist')
     paralogslist = simplejson.load(file)
     file.close()
 
@@ -106,7 +107,7 @@ if __name__ == "__main__":
     map(lambda x: getotheralign(orfs[x], x, calbalign, 'calbalign'), geneset)
     map(lambda x: getotheralign(orfs[x], x, spomalign, 'spomalign'), geneset)
     
-    file = open('./data/sequences/Scer.fasta')
+    file = open(datasource + '/data/sequences/Scer.fasta')
     lines = file.readlines()
     file.close()
 
