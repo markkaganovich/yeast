@@ -3,10 +3,12 @@ import simplejson
 class Orf:
     def __init__(self, name):
         self.name = name
-
-def initall(objects, geneset):
-    for g in geneset:
-        objects[g] = Orf(g)
+	
+    def getSYTpos(self):
+        if hasattr(self, 'seq'):
+	        sytpos = ([i for i, x in enumerate(self.seq) if x == 'S' or x == 's' or 
+x == 'T' or x == 't' or x == 'Y' or x == 'y'])
+	        setattr(self, 'sytpos', sytpos)
 
 def addtoall(objects, geneset, attrfun, attrhash):
     for g in geneset:
