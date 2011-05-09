@@ -8,4 +8,9 @@ def json(filename, datasource =''):
     file.close()
     return result
 
+def dump(data, filename, datasource = ''):
+	file = open(datasource + filename,'w')
+	simplejson.dump(data, file)
+	file.close()
+
 

@@ -8,16 +8,21 @@ def init(objects, clas, types):
 		objects[t] = clas(t)
 		
 def attrs(objects, *attr):
-	for a in attr:
-		data = globals.json(filehash[a], globals.datasource)
-		for o in objects.keys():
-			ORFs.__getattribute__(attrmethods[a])(objects[o], o, data)
+	for o in objects.keys():
+		for a in attr:
+			if 'args' in attrmethods[a].keys():
+		       args = attrmethods[a]['args']
+			   ORFs.__getattribute__(attrmethods[a]['fun'])(objects[o], args)
+			apply(internal, [objects[o]] + intermethods.keys())
 
-def internal(objects, *internalattr):
+def internal(obj, *internalattr):
 	for ia in internalattr:
-		for o in objects.keys():
-			objects[o].__class__.__dict__[intermethods[ia]]()
+			obj.__class__.__dict__[intermethods[ia]](obj)
 
 filehash = globals.json('./dbase/filehash')	
 attrmethods = globals.json('./dbase/attrmethods')   
 intermethods = globals.json('./dbase/intermethods') 
+
+if __name__ == '__main__':
+	orfs ={}
+	init(orfs, ORFs.Orf, 'geneset')
