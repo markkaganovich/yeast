@@ -1,1 +1,1 @@
-{"syt": "getSYTpos"}
+{"kwalpsitecons": {"fun": "seqconservation", "args": ["kwalalign", "phosphosites"]}, "scasalignindex": {"fun": "getalignindex", "args": "scasalign"}, "scasallaacons": {"fun": "seqconservation", "args": ["scasalign", "seq"]}, "spomalignindex": {"fun": "getalignindex", "args": "spomalign"}, "syt": {"fun": "getSYTpos"}, "kwalallaacons": {"fun": "seqconservation", "args": ["kwalalign", "seqpos"]}, "kwalalignindex": {"fun": "getalignindex", "args": "kwalalign"}, "kwalsytcons": {"fun": "seqconservation", "args": ["kwalalign", "sytpos"]}}
