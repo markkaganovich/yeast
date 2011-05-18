@@ -1,5 +1,6 @@
 import simplejson
 import globals
+import OrfHelpers
 
 filehash = globals.json('./dbase/filehash')
 
@@ -37,7 +38,24 @@ class Orf:
             index = map(lambda x: getattr(self, align+'index')[x], getattr(self, aaposition))
             cons = map(lambda x: alignseq[alignseq.keys()[0]][x] == alignseq[alignseq.keys()[1]][x], index)
             setattr(self, align+aaposition+'cons', sum(cons)/float(len(getattr(self, aaposition))))
-        
+    
+    def calcturnover(self, args):
+        alignment = args[0]
+        index = args[1]
+        ref = args[2]
+        extent = args[3]
+        binsizes = args[4]
+        aapos = args[5]
+        if hasattr(self, aapos) and hasattr(self, alignment) and hasattr(self,
+index) and len(alignment.keys()):
+            aaset = getattr(self, aapos)
+            index = getattr(self, aapos)
+            alignment = getattr(self, alignment)
+            turnovers = {}
+            for b in binsizes:
+                turnovers[b] = OrfHelpers.turnover(self, alignment, index, ref,
+etent, b, aaset)
+
 
 def addtoall(objects, geneset, attrfun, attrhash):
     for g in geneset:
@@ -110,6 +128,11 @@ def getGOterms(orf, data):
 
 
     
+
+
+
+
+                
 
 
 
