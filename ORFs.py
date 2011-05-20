@@ -1,8 +1,9 @@
 import simplejson
 import globals
 import OrfHelpers
-
 filehash = globals.json('./dbase/filehash')
+attrmethods = globals.json('./dbase/attrmethods')
+intermethods = globals.json('./dbase/intermethods')
 
 class Orf:
     def __init__(self, orfname):
@@ -40,21 +41,24 @@ class Orf:
             setattr(self, align+aaposition+'cons', sum(cons)/float(len(getattr(self, aaposition))))
     
     def calcturnover(self, args):
-        alignment = args[0]
-        index = args[1]
-        ref = args[2]
-        extent = args[3]
-        binsizes = args[4]
-        aapos = args[5]
+        name = args[0]
+        alignment = args[1]
+        index = args[2]
+        ref = args[3]
+        extent = args[4]
+        binsizes = args[5]
+        aapos = args[6]
         if hasattr(self, aapos) and hasattr(self, alignment) and hasattr(self,
-index) and len(alignment.keys()):
+index):
             aaset = getattr(self, aapos)
-            index = getattr(self, aapos)
+            index = getattr(self, index)
             alignment = getattr(self, alignment)
             turnovers = {}
             for b in binsizes:
-                turnovers[b] = OrfHelpers.turnover(self, alignment, index, ref,
-etent, b, aaset)
+                print self
+                turnovers[b] = OrfHelpers.turnover(alignment, index, ref,
+extent, b, aaset)
+            setattr(self, name, turnovers) 
 
 
 def addtoall(objects, geneset, attrfun, attrhash):

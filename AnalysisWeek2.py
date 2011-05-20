@@ -51,7 +51,7 @@ def calcturnoverorfs(orfs, binsize, aapos, aas):
                 scer = o.kwalalign['Scer']
                 otherspecies = o.kwalalign['Kwal']
                 ai = o.kwalalignindex[i]
-                if scer[o.kwalalignindex[i]] != otherspecies[ai]:
+                if scer[ai] != otherspecies[ai]:
                     left = ai-binsize/2
                     right = ai+binsize/2
                     if left < 0:
@@ -63,7 +63,7 @@ def calcturnoverorfs(orfs, binsize, aapos, aas):
                     numsetinbin = (len(filter(lambda y: 
                                     o.kwalalignindex[y] in aaset, range(left, right))))
                     if numsetinbin > 0:
-                        inds = [l for l in range(0, len(slice)) if slice[l] == x]
+                        inds = [l for l in range(0, len(slice)) if slice[l] == scer[ai]]
                         lost = (len(filter(lambda y: slicescer[y] != x, inds))
                                 /float(numsetinbin))
                         o.phosphoturnover[binsize] = lost + o.phosphoturnover[binsize]

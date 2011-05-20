@@ -32,6 +32,7 @@ def turnover(alignment, index, ref, extent, binsize, aaset):
     turndic = {}
     turndic['turnovers'] = turnovers
     turndic['turnopps'] = topp
+    return turndic
 
 def countturnovers(inds, refalign, extentalign, pos):
     for i in inds:
