@@ -1,4 +1,5 @@
 import ORFs
+import Paralogs
 import globals
 
 def init(objects, clas, mod, types):
@@ -12,6 +13,7 @@ def attrs(objects, mod,  *attr):
         filehash = getattr(mod, 'filehash')
         attrmethods = getattr(mod, 'attrmethods')
         intermethods = getattr(mod, 'intermethods')
+        print a
         data = globals.json(filehash[attrmethods[a]['data']], globals.datasource)
         for o in objects.keys():
             if 'args' in attrmethods[a].keys():
@@ -31,7 +33,11 @@ def internal(obj, intermethods, *internalattr):
 if __name__ == '__main__':
     orfs = {}
     init(orfs, ORFs.Orf, ORFs, 'geneset')
+    attrs(orfs, ORFs, 'seq')
 
+    pars = {}
+    Paralogs.initall(pars, orfs, 'plistW')
 
+    
 
 
