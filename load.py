@@ -1,38 +1,42 @@
 import ORFs
 import Paralogs
 import globals
+import A
+import iA
 
 def init(objects, clas, mod, types):
-    filehash = getattr(mod, 'filehash')
-    data = globals.json(filehash[types], globals.datasource)
+    g = getattr(A, types)
+    data = globals.json(getattr(g, 'data'), globals.datasource)
     for t in data:
         objects[t] = clas(t)
 
 def attrs(objects, mod,  *attr):
     for a in attr:
-        filehash = getattr(mod, 'filehash')
-        attrmethods = getattr(mod, 'attrmethods')
-        intermethods = getattr(mod, 'intermethods')
         print a
-        data = globals.json(filehash[attrmethods[a]['data']], globals.datasource)
+        g = getattr(A, a)
+        data = globals.json(getattr(g, 'data'), globals.datasource)
         for o in objects.keys():
-            if 'args' in attrmethods[a].keys():
-                args = attrmethods[a]['args']
-                ORFs.__getattribute__(attrmethods[a]['fun'])(objects[o], data, args)
+            if hasattr(g, 'args'):
+                args = getattr(g,'args')
+                ORFs.__getattribute__(getattr(g, 'fun'))(objects[o], data, args)
             else:
-                ORFs.__getattribute__(attrmethods[a]['fun'])(objects[o], data)
-            apply(internal, [objects[o]] + [intermethods] + sorted(intermethods.keys()))
+                ORFs.__getattribute__(getattr(g, 'fun'))(objects[o], data)
+            intermethods = [i for i in iA.__dict__.keys() if not
+i.startswith('_')]
+            apply(internal, [objects[o]] + sorted(intermethods))
 
-def internal(obj, intermethods, *internalattr):
+def internal(obj,  *internalattr):
     for ia in internalattr:
-        if 'args' in intermethods[ia].keys():
-            obj.__class__.__dict__[intermethods[ia]['fun']](obj, intermethods[ia]['args'])
+        g = getattr(iA, ia)
+        print g
+        if hasattr(g, 'args'):
+            obj.__class__.__dict__[getattr(g, 'fun')](obj, getattr(g, 'args'))
         else:
-            obj.__class__.__dict__[intermethods[ia]['fun']](obj)
+            obj.__class__.__dict__[getattr(g, 'fun')](obj)
 
 if __name__ == '__main__':
     orfs = {}
-    init(orfs, ORFs.Orf, ORFs, 'geneset')
+    init(orfs, ORFs.Orf, ORFs, 'init')
     attrs(orfs, ORFs, 'seq')
 
     pars = {}
