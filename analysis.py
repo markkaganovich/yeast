@@ -91,7 +91,16 @@ for p in Pars.keys():
 events = [x[2] for x in paraloglist if len(x) > 2] 
 for i,p in enumerate(plist):
     setattr(Pars[p], 'event', events[i])
-    
+
+eventdic = {}   
+for i,p in enumerate(paraloglist):
+    key = (paraloglist[i][0], paraloglist[i][1]) 
+    if key in pars.keys():
+        eventdic[paraloglist[i][0]+'_'+paraloglist[i][1]] = events[i]
+
+
+
+
 gotermdiv = [(x[3], x[4], x[5]) for x in paraloglist if len(x) > 5]
 for i,p in enumerate(plist):
     setattr(Pars[p], 'go_component_div', gotermdiv[i][0])

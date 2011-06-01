@@ -6,6 +6,33 @@ class init:
     fun = '__init__'
     data = 'scergenes'
 
+class phosphositeturnover:
+    args = ['phosphositeturnover', 'kwalalign', 'kwalalignindex', 'Scer',
+'Kwal', [0, 5, 10], 'phosphosite']
+    fun = 'calcturnover'
+
+class scasalignindex:
+    args = 'scasalign'
+    fun = 'getalignindex'
+
+class scasallaacons:
+    args = ['scasalign', 'seq']
+    fun = 'seqconservation'
+
+class spomalignindex:
+    args = 'spomalign'
+    fun  = 'getalignindex'
+
+class sytturnover:
+    args = ['sytturnover',
+                          'kwalalign',
+                          'kwalalignindex',
+                          'Scer',
+                          'Kwal',
+                          [0, 5, 10],
+                          'sytpos']
+    fun = 'calcturnover'
+
 class calbalign:
     fun = 'getotheralign'
     args = 'calbalign'
@@ -16,8 +43,8 @@ class orthologs:
     data = 'KellisOrthos'
     
 class kwalalign:
-    fun = 'getseq'
-    data = 'ScerKwalAlign'
+    fun = 'getalign'
+    data = 'ScerKwalAlignment'
 
 class goterms:
     fun = 'getGOterms'
@@ -63,5 +90,18 @@ class initparsW:
     fun = 'initall'
     data = 'plist'
 
+class paralign:
+    fun = 'getalign'
+    data = 'Wparsalignment'
+
+class alignmentstats:
+    fun = 'alignmentstats'
+
+class phosphostats:
+    fun = 'phosphostats'
+
+class event:
+    fun = 'getevents'
+    data = 'wapinskieventsdic'
 
 

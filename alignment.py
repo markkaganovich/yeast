@@ -3,7 +3,10 @@ import os
 def align(alignmentprogram = 'mafft', inputpath = './data/Alignments/input/', outputpath = './data/Alignments/output/'):
     for file in os.listdir(inputpath):
         print alignmentprogram+' '+inputpath+file+' > '+ outputpath+file
-        os.system(alignmentprogram+' '+inputpath+file+' > '+ outputpath+file)
+        if alignmentprogram == 'muscle':
+            os.system('~/Downloads/muscle' + ' -in ' + inputpath + file + ' -out ' + outputpath+file)
+        else:
+            os.system(alignmentprogram+' '+inputpath+file+' > '+ outputpath+file)
 
 def filestodic(alignmentfiles = './data/Alignments/ScerKwal/'):
     alignment ={}
@@ -23,7 +26,6 @@ def filestodic(alignmentfiles = './data/Alignments/ScerKwal/'):
     return alignment
 
 def makefastainput(ref_species, orthospecies, orthologdic, **sequencefiles):
-    
     genomes = {}
     for k in sequencefiles.keys():
         print k
@@ -51,6 +53,20 @@ def makefastainput(ref_species, orthospecies, orthologdic, **sequencefiles):
                     file.write('>'+i+'\n'+genomes[i][orthogene]+'\n')
         file.close()
 
+'''
+align two sequences
+'''
+def alignseqs(seq1, seq2, name1, name2):
+    if not 'tempseqs' in os.listdir('./'):
+        os.mkdir('./tempseqs')
+    filename = name1 + '_' + name2 + '.fasta'
+    file = open('./tempseqs/' + filename,'w')
+    file.write('>'+name1 + '\n' + seq1 + '\n')
+    file.write('>'+name2 + '\n' + seq2)
+    file.close()
+    print name1+name2
+    print ('mafft'+' '+ './tempseqs/' + filename +' > '+ './tempoutputs/'+filename)
+    os.system('mafft ./tempseqs/' + filename +' > ./tempoutputs/'+ filename)
 
 
 

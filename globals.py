@@ -25,12 +25,14 @@ def addfeatures(classname, feature, hash, fun, args = None, data = None):
     if data != None:
         methods[feature]['data'] = data
     dump(methods, classname.__name__+str(hash), './dbase/')
-    '''
+'''
+'''
     if 'args' in kwargs.keys():
         methods['args'] = kwargs['args']
     if 'data' in kwargs.keys():
         methods['data'] = kwargs['data']
-    '''
+'''
+'''
 '''
 
 

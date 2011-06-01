@@ -1,9 +1,6 @@
 import simplejson
 import globals
 import OrfHelpers
-filehash = globals.json('filehash', './dbase/')
-attrmethods = globals.json('attrmethods', './dbase/')
-intermethods = globals.json('intermethods', './dbase/')
 
 class Orf:
     def __init__(self, orfname):
