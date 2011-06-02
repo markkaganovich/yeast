@@ -2,8 +2,6 @@ import simplejson
 import globals
 
 filehash = globals.json('Paralogsfilehash', './dbase/')
-attrmethods = globals.json('Paralogsattrmethods', './dbase/')
-intermethods = globals.json('Paralogsintermethods', './dbase/')
 
 class paralogs:
     def __init__(self, orfs):
