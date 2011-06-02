@@ -6,10 +6,15 @@ class init:
     fun = '__init__'
     data = 'scergenes'
 
-class phosphositeturnover:
+class calcphosphositeturnover:
     args = ['phosphositeturnover', 'kwalalign', 'kwalalignindex', 'Scer',
 'Kwal', [0, 5, 10], 'phosphosite']
     fun = 'calcturnover'
+
+class phosphositeturnover:
+    args = ['phosphositeturnover']
+    fun = 'getturnover'
+    data = 'phosphositeturnover'
 
 class scasalignindex:
     args = 'scasalign'
@@ -23,7 +28,7 @@ class spomalignindex:
     args = 'spomalign'
     fun  = 'getalignindex'
 
-class sytturnover:
+class calcsytturnover:
     args = ['sytturnover',
                           'kwalalign',
                           'kwalalignindex',
@@ -32,6 +37,11 @@ class sytturnover:
                           [0, 5, 10],
                           'sytpos']
     fun = 'calcturnover'
+
+class sytturnover:
+    args = ['sytturnover']
+    fun = 'getturnover'
+    data = 'sytturnover'
 
 class calbalign:
     fun = 'getotheralign'

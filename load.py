@@ -19,12 +19,17 @@ def attrs(objects, internals, mod,  *attr):
             data = globals.json(getattr(g, 'data'), globals.datasource)
         for o in objects.keys():
             if not hasattr(g, 'data'):
-                mod.__getattribute__(getattr(g, 'fun'))(objects[o])
-            elif hasattr(g, 'args'):
-                args = getattr(g,'args')
-                mod.__getattribute__(getattr(g, 'fun'))(objects[o], data, args)
+                if hasattr(g, 'args'):
+                    args = getattr(g,'args')
+                    mod.__getattribute__(getattr(g, 'fun'))(objects[o], args)
+                else:
+                    mod.__getattribute__(getattr(g, 'fun'))(objects[o])
             else:
-                mod.__getattribute__(getattr(g, 'fun'))(objects[o], data)
+                if hasattr(g, 'args'):
+                    args = getattr(g,'args')
+                    mod.__getattribute__(getattr(g, 'fun'))(objects[o], data, args)
+                else:
+                    mod.__getattribute__(getattr(g, 'fun'))(objects[o], data)
             intermethods = [i for i in internals.__dict__.keys() if not i.startswith('_')]
             apply(internal, [objects[o], internals] + sorted(intermethods))
 

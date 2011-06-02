@@ -37,27 +37,32 @@ class Orf:
             cons = map(lambda x: alignseq[alignseq.keys()[0]][x] == alignseq[alignseq.keys()[1]][x], index)
             setattr(self, align+aaposition+'cons', sum(cons)/float(len(getattr(self, aaposition))))
     
-    def calcturnover(self, args):
-        name = args[0]
-        alignment = args[1]
-        index = args[2]
-        ref = args[3]
-        extent = args[4]
-        binsizes = args[5]
-        aapos = args[6]
-        if hasattr(self, aapos) and hasattr(self, alignment) and hasattr(self,
+def calcturnover(self, args):
+    name = args[0]
+    alignment = args[1]
+    index = args[2]
+    ref = args[3]
+    extent = args[4]
+    binsizes = args[5]
+    aapos = args[6]
+    if hasattr(self, aapos) and hasattr(self, alignment) and hasattr(self,
 index):
-            aaset = getattr(self, aapos)
-            index = getattr(self, index)
-            alignment = getattr(self, alignment)
-            turnovers = {}
-            for b in binsizes:
-                print self
-                turnovers[b] = OrfHelpers.turnover(alignment, index, ref,
+        aaset = getattr(self, aapos)
+        index = getattr(self, index)
+        alignment = getattr(self, alignment)
+        turnovers = {}
+        for b in binsizes:
+            print self
+            turnovers[b] = OrfHelpers.turnover(alignment, index, ref,
 extent, b, aaset)
-            setattr(self, name, turnovers) 
+        setattr(self, name, turnovers) 
 
+def getturnover(orf, data, arg):
+    type = arg[0]
+    if orf.orfname in data.keys():
+        setattr(orf, type, data[orf.orfname])
 
+ 
 def addtoall(objects, geneset, attrfun, attrhash):
     for g in geneset:
         attrfun(objects[g], g, attrhash)

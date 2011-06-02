@@ -122,6 +122,11 @@ def getalign(par, alignments):
     alignment = alignments[name]
     setattr(par, 'alignment', alignment)
 
+def reminstances(objects, attr):
+    for p in objects.keys():
+        if not hasattr(objects[p], attr):
+            del objects[p]
+
 
 
 
