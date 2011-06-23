@@ -39,7 +39,7 @@ class paralogs:
         for i in range(0,len(self.orfs)):
             if hasattr(self.orfs[i], 'phosphosite') and hasattr(self,
 'alignindex'):
-                self.phosphosites[self.orfs[i].orfname] = filter(lambda x: self.alignindex[self.orfs[i].orfname][x], self.orfs[i].phosphosite)
+                self.phosphosites[self.orfs[i].orfname] = map(lambda x: self.alignindex[self.orfs[i].orfname][x], self.orfs[i].phosphosite)
 
     def getsyt(self):
         if hasattr(self, 'alignindex'):
@@ -47,6 +47,21 @@ class paralogs:
             setattr(self, 'sytpos', sytpos)
             for i in self.orfs:
                 self.sytpos[i.orfname] = (map(lambda x: self.alignindex[i.orfname][x], i.sytpos))
+
+    def psitedivfun(self):
+        if hasattr(self, 'phosphosites'):
+            if len(self.phosphosites.values()) == 1:
+                setattr(self, 'psitediv', 1)
+                print self.orfs[0].orfname
+                print self.orfs[1].orfname
+            if len(self.phosphosites.values()) == 2:
+                l = self.phosphosites.values()[0].__len__() + self.phosphosites.values()[1].__len__()
+                incommon = list(set(self.phosphosites.values()[0]) & set(self.phosphosites.values()[1]))
+                print incommon
+                print l-2*len(incommon)
+                print float(l-len(incommon))
+                setattr(self, 'psitediv', (l-2*len(incommon))/float(l-len(incommon)))
+
 
 def alignmentstats(self):
     if hasattr(self, 'alignment'):

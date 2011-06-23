@@ -7,7 +7,7 @@ class kwalallaacons:
     fun = 'seqconservation'
 
 class kwalpsitecons:
-    args = ['kwalalign', 'phosphosites']
+    args = ['kwalalign', 'phosphosite']
     fun = 'seqconservation'
 
 class kwalsytcons:
@@ -15,5 +15,6 @@ class kwalsytcons:
     fun = 'seqconservation'
 
 class syt:
-    fun = 'getSYTpos'
-    
+    fun = 'getSYTpos'    
+
+ 

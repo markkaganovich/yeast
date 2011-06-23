@@ -44,12 +44,13 @@ def internal(obj,  internals, *internalattr):
 if __name__ == '__main__':
     orfs = {}
     init(orfs, ORFs.Orf, ORFs, 'init')
-    attrs(orfs, iA, ORFs, 'orthologs', 'seq', 'kwalalign', 'phosphosites')
+    attrs(orfs, iA, ORFs, 'orthologs', 'seq', 'kwalalign', 'phosphosites',
+'TF', 'conservedpsites', 'genename')
 
     pars = {}
     Paralogs.initall(pars, orfs, 'plistW')
     attrs(pars, iParA, Paralogs, 'paralign')
-    attrs(pars, iParA, Paralogs,  'alignmentstats')
+    attrs(pars, iParA, Paralogs,  'alignmentstats', 'event', 'phosphostats' )
     Paralogs.calcdivergence(pars, 'kwalalignseqposcons', 'kwalalignsytposcons',
 'kwalalignphosphositescons') 
 

@@ -7,3 +7,7 @@ class phosphosites:
 class sytpos:
     fun = 'getsyt'
 
+class psiteeventcons:
+    fun = 'psitedivfun'
+
+

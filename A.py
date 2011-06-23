@@ -110,6 +110,9 @@ class alignmentstats:
 class phosphostats:
     fun = 'phosphostats'
 
+class conservedpsites:
+    fun = 'conservedpsites'
+
 class event:
     fun = 'getevents'
     data = 'wapinskieventsdic'

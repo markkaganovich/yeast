@@ -36,7 +36,21 @@ class Orf:
             index = map(lambda x: getattr(self, align+'index')[x], getattr(self, aaposition))
             cons = map(lambda x: alignseq[alignseq.keys()[0]][x] == alignseq[alignseq.keys()[1]][x], index)
             setattr(self, align+aaposition+'cons', sum(cons)/float(len(getattr(self, aaposition))))
-    
+
+def conservedpsites(self):
+    notconserved = []
+    conserved = []
+    if hasattr(self, 'kwalalignindex') and hasattr(self, 'phosphosite'):
+        for p in self.phosphosite:
+            if self.kwalalign['Scer'][self.kwalalignindex[p]] != self.kwalalign['Kwal'][self.kwalalignindex[p]]:
+                notconserved.append(p)
+            else:
+                conserved.append(p) 
+        setattr(self, 'notconservedpsites', notconserved)
+        setattr(self, 'conservedpsites', conserved)
+
+
+   
 def calcturnover(self, args):
     name = args[0]
     alignment = args[1]
