@@ -60,6 +60,10 @@ class goterms:
     fun = 'getGOterms'
     data = 'goterms'
 
+class goslim:
+    fun = 'getgoslimcategories'
+    data = 'goslimcategories'
+
 class speciesalign:
     fun = 'getmultiplealign'
     data = 'speciesalign'
@@ -91,6 +95,7 @@ class TF:
 class phosphosites:
     fun = 'getphosphosites'
     data = 'gersteinphosphositefile'
+    args = 'phosphosite'
 
 class wapinskiparalogs:
     fun = 'getWparalogs'
@@ -117,4 +122,33 @@ class event:
     fun = 'getevents'
     data = 'wapinskieventsdic'
 
+class youngTFs:
+    fun = 'hasproperty'
+    args = 'youngTFs'
+    data = 'youngTFs'
+
+class pughTFs:
+    fun = 'hasproperty'
+    args = 'pughgenes'
+    data = 'pughgenes'
+
+class bulykTFs:
+    fun = 'hasproperty'
+    args = 'bulykTF'
+    data = 'bulykTFs'
+
+class gersteinTFs:
+    fun = 'hasproperty'
+    args = 'gersteinTF'
+    data = 'gersteinTFs'
+
+class disorderedpsites:
+    fun = 'getphosphosites'
+    data = 'disorderedpsites'
+    args = 'disorderedpsites'
+
+class orderedpsites:
+    fun = 'getphosphosites'
+    data = 'orderedpsites'
+    args = 'orderedpsites'
 

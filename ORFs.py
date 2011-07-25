@@ -85,6 +85,13 @@ def genename(orf, genenames):
     if orf.orfname in genenames.keys():
         orf.genename = genenames[orf.orfname]
 
+def getgoslimcategories(orf, goslimcategories):
+    for c in goslimcategories.keys():
+        if orf.orfname in goslimcategories[c]:
+            setattr(orf, c, True)
+        else:
+            setattr(orf, c, False) 
+
 def getWparalogs(orf, wapinskiparalogs):
     paralogs = []
     events = []
@@ -101,11 +108,11 @@ def getWparalogs(orf, wapinskiparalogs):
     setattr(orf, 'paralogs', paralogs)  
     setattr(orf, 'duplevent', events)
 
-def getphosphosites(orf, data):
+def getphosphosites(orf, data, *args):
     name = orf.orfname
     if name in data.keys():
         properlyindexed = map(lambda x: x-1, data[name])
-        setattr(orf, 'phosphosite', properlyindexed)
+        setattr(orf, args[0], properlyindexed)
 
 def getalign(orf, data):
     name = orf.orfname

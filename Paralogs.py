@@ -41,6 +41,23 @@ class paralogs:
 'alignindex'):
                 self.phosphosites[self.orfs[i].orfname] = map(lambda x: self.alignindex[self.orfs[i].orfname][x], self.orfs[i].phosphosite)
 
+    def getdisorderedpsites(self):
+        setattr(self, 'disorderedpsites', {})
+        for i in range(0, len(self.orfs)):
+            if hasattr(self.orfs[i], 'disorderedpsites') and hasattr(self,
+'alignindex'):
+                self.disorderedpsites[self.orfs[i].orfname] = map(lambda x:
+self.alignindex[self.orfs[i].orfname][x], self.orfs[i].disorderedpsites)
+
+    def getorderedpsites(self):
+        setattr(self, 'orderedpsites', {})
+        for i in range(0, len(self.orfs)):
+            if hasattr(self.orfs[i], 'orderedpsites') and hasattr(self,
+'alignindex'):
+                self.orderedpsites[self.orfs[i].orfname] = map(lambda x:
+self.alignindex[self.orfs[i].orfname][x], self.orfs[i].orderedpsites)
+
+        
     def getsyt(self):
         if hasattr(self, 'alignindex'):
             sytpos = {}

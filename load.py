@@ -45,13 +45,15 @@ if __name__ == '__main__':
     orfs = {}
     init(orfs, ORFs.Orf, ORFs, 'init')
     attrs(orfs, iA, ORFs, 'orthologs', 'seq', 'kwalalign', 'phosphosites',
-'TF', 'conservedpsites', 'genename')
+'TF', 'conservedpsites', 'genename', 'pughTFs', 'youngTFs', 'bulykTFs',
+'gersteinTFs', 'disorderedpsites', 'orderedpsites', 'goslim')
 
     pars = {}
     Paralogs.initall(pars, orfs, 'plistW')
     attrs(pars, iParA, Paralogs, 'paralign')
     attrs(pars, iParA, Paralogs,  'alignmentstats', 'event', 'phosphostats' )
     Paralogs.calcdivergence(pars, 'kwalalignseqposcons', 'kwalalignsytposcons',
-'kwalalignphosphositescons') 
+'kwalalignphosphositescons')
+     
 
 

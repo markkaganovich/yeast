@@ -10,4 +10,8 @@ class sytpos:
 class psiteeventcons:
     fun = 'psitedivfun'
 
+class disorderedpsites:
+    fun = 'getdisorderedpsites'
 
+class orderedpsites:
+    fun = 'getorderedpsites'
